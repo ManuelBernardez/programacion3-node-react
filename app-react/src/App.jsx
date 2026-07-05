@@ -4,7 +4,8 @@ import './App.css'
 function App() {
   return (
     <div className="app">
-      <h1>Hola Mundo desde React - P3</h1>
+      <h1>Lista de tareas</h1>
+      <p>Mini aplicación creada con React</p>
       <TareasApp />
     </div>
   )

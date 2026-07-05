@@ -6,21 +6,35 @@ function TareasApp() {
 
   function agregarTarea() {
     if (texto.trim() === '') return
-    setTareas([...tareas, texto])
+    setTareas([...tareas, { texto, completada: false }])
     setTexto('')
   }
 
   function eliminarTarea(index) {
-    setTareas(prevTareas => prevTareas.filter((_, i) => i !== index))
+    setTareas(tareas.filter((_, i) => i !== index))
+  }
+
+  function alternarCompletada(index) {
+    setTareas(
+      tareas.map((tarea, i) =>
+        i === index ? { ...tarea, completada: !tarea.completada } : tarea
+      )
+    )
   }
 
   function manejarTecla(e) {
     if (e.key === 'Enter') agregarTarea()
   }
 
+  const pendientes = tareas.filter((t) => !t.completada).length
+  const completadas = tareas.length - pendientes
+
   return (
     <div className="tareas-app">
-      <h2>Mi lista de tareas ({tareas.length})</h2>
+      <h2>Mi lista</h2>
+      <p className="contador">
+        {pendientes} pendientes · {completadas} completadas
+      </p>
 
       <div className="tareas-input">
         <input
@@ -37,8 +51,15 @@ function TareasApp() {
 
       <ul>
         {tareas.map((tarea, index) => (
-          <li key={index}>
-            {tarea}
+          <li key={index} className={tarea.completada ? 'completada' : ''}>
+            <label className="tarea-texto">
+              <input
+                type="checkbox"
+                checked={tarea.completada}
+                onChange={() => alternarCompletada(index)}
+              />
+              {tarea.texto}
+            </label>
             <button onClick={() => eliminarTarea(index)}>Eliminar</button>
           </li>
         ))}
